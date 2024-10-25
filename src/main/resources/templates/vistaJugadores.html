@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Jugadores</title>
+</head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #eef2f3;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #007BFF;
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    li {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin: 15px 0;
+        padding: 15px;
+        position: relative;
+        transition: transform 0.3s;
+    }
+
+    li:hover {
+        transform: translateY(-2px);
+    }
+
+    span {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    span[th\:if] {
+        font-weight: bold;
+        color: #28a745; /* Color para "GANADOR" */
+    }
+
+    span[th\:if]:last-of-type {
+        color: #dc3545; /* Color para "PERDEDOR" */
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+        background-color: #007BFF;
+        padding: 8px 12px;
+        border-radius: 5px;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        transition: background-color 0.3s;
+    }
+
+    a:hover {
+        background-color: #0056b3; /* Color del enlace al pasar el ratón */
+    }
+
+    a[th\:if] {
+        display: inline-block; /* Asegura que el enlace sólo se muestre cuando sea necesario */
+        margin-top: 10px; /* Espacio entre el enlace y el resto del contenido */
+    }
+</style>
+<body>
+<h1>LISTA DE JUGADORES REGISTRADOS</h1>
+
+<ul>
+    <li th:each="jugador : ${jugadores}">
+        Nombre: <span th:text="${jugador.nombre}"></span>
+        Victorias: <span th:text="${#numbers.formatDecimal((jugador.victorias / (jugador.victorias + jugador.derrotas * 1.0)) * 100, 0, 2)} + '%'"></span>
+
+        <span th:if="${jugador.victorias / (jugador.victorias + jugador.derrotas * 1.0) > 0.5 && jugador.derrotas != 0}" th:text="'GANADOR'"></span>
+        <span th:if="${jugador.victorias / (jugador.victorias + jugador.derrotas * 1.0) <= 0.5}" th:text="'PERDEDOR'"></span>
+        <a th:href="@{'/invencible/' + ${jugador.nombre}}" th:if="${jugador.derrotas == 0}" th:text="'INVENCIBLE'"></a>
+    </li>
+</ul>
+<a href="/">registro</a>
+
+
+</body>
+</html>
